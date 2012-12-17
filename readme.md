@@ -15,6 +15,7 @@ Boom. Instant Sinatra project.
 	config.ru
 	app.rb
 	start.sh
+	readme.md
 	helpers/
 		init.rb
 		partials.rb
@@ -27,5 +28,9 @@ Boom. Instant Sinatra project.
 	views/
 		layout.erb
 		main.erb
+	public/
+		css/
+		img/
+		js/
  
 
