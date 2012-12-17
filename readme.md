@@ -1,27 +1,31 @@
-#Sinatra template for Monk: http://monkrb.com
+# Sinatra template for Monk: http://monkrb.com
 
-# Before creating your project
-monk add msg-monk-sinatra git@git.vibes.com:msg-monk-sinatra.git
+### Run these commands ONCE:
+    gem install monk
+    monk add sinatra git@git.vibes.com:msg-monk-sinatra.git 
 
-# Inside your empty project directory
-monk init -s msg-monk-sinatra 
+### Then, when you need a new Sinatra app, create an empty project directory, navigate to it from the command line and run:
+    monk init -s sinatra
 
-File Layout:
+Boom. Instant Sinatra project.
 
-Gemfile
-config.ru
-app.rb
-helpers/
-  init.rb
-  partials.rb
-models/
-  init.rb
-  user.rb
-routes/
-  init.rb
-  main.rb
-views/
-  layout.erb
-  main.erb
+### File Layout:
+
+	Gemfile
+	config.ru
+	app.rb
+	start.sh
+	helpers/
+		init.rb
+		partials.rb
+	models/
+		init.rb
+		user.rb
+	routes/
+		init.rb
+		main.rb
+	views/
+		layout.erb
+		main.erb
  
 
