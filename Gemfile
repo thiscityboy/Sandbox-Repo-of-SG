@@ -1,0 +1,12 @@
+source 'http://rubygems.org'
+
+gem 'sinatra'
+gem 'sinatra-contrib'
+gem 'sinatra-flash'
+gem 'json'
+gem 'mongo'
+gem 'bson_ext'
+gem 'faraday'
+gem 'xml-simple'
+gem 'jsmin'
+gem 'cssmin'
