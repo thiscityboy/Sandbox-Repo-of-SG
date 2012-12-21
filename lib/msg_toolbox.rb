@@ -239,8 +239,10 @@ module MsgToolbox
     end
 
     @payload << "</user></subscriptions>"
+    puts @url
+    puts @payload
     conn = Faraday.new
-    conn.basic_auth(ENV['SPLAT_USER'], ENV['SPLAT_PW'])
+    conn.basic_auth(ENV['SPLAT_API_USER'], ENV['SPLAT_API_PASS'])
     @response = conn.post do |req|
       req.url @url
       req.headers['Content-Type'] = 'application/xml'
@@ -262,7 +264,7 @@ module MsgToolbox
                           </subscription>'
     @url = 'http://www.vibescm.com/api/subscription_campaigns/'+campaignId.to_s+'/subscriptions.xml'
     conn = Faraday.new
-    conn.basic_auth(ENV['SPLAT_USER'], ENV['SPLAT_PW'])
+    conn.basic_auth(ENV['SPLAT_API_USER'], ENV['SPLAT_API_PASS'])
     response = conn.post do |req|
       req.url @url
       req.headers['Content-Type'] = 'application/xml'
@@ -404,5 +406,8 @@ module MsgToolbox
   end
 
 end
+
+
+
 
 
