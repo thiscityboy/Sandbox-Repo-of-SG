@@ -3,7 +3,8 @@ require 'sinatra/flash'
 require 'sinatra/reloader'
 require 'mongo'
 require 'json'
-require 'csv'
+require 'msg'
+
 require_relative 'minify_resources'
 
 class MyApp < Sinatra::Application

@@ -2,6 +2,3 @@
 
 require_relative 'nicebytes'
 MyApp.helpers NiceBytes
-
-require_relative 'msg_toolbox'
-MyApp.helpers MsgToolbox
