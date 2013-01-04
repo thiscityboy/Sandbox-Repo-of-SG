@@ -10,12 +10,14 @@ class MyApp < Sinatra::Application
   register Sinatra::Reloader
   enable :sessions
 
-  configure do
-    mongouri = ENV['MONGOLAB_URI']
-    uri = URI.parse(mongouri)
-    $conn = Mongo::Connection.from_uri(mongouri)
-    $db = $conn.db(uri.path.gsub(/^\//, ''))
-  end
+  #uncomment to add mongo support
+  #
+  # configure do
+  #   mongouri = ENV['MONGOLAB_URI']
+  #   uri = URI.parse(mongouri)
+  #   $conn = Mongo::Connection.from_uri(mongouri)
+  #   $db = $conn.db(uri.path.gsub(/^\//, ''))
+  # end
 
   configure :production do
     set :clean_trace, true
