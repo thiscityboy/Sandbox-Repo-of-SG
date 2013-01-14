@@ -1,23 +1,24 @@
 require 'sinatra'
 require 'sinatra/flash'
 require 'sinatra/reloader'
-require 'mongo'
+require 'mongo_mapper'
 require 'json'
-require 'msg'
 
 require_relative 'minify_resources'
 
 class MyApp < Sinatra::Application
   register Sinatra::Reloader
   enable :sessions
+  set :session_secret, '03c9fe100fcf579cd70229898381157423345673849e10d0c54121cc37bda6a66ec2a3de3'
+
 
   #uncomment to add mongo support
-  #
   # configure do
   #   mongouri = ENV['MONGOLAB_URI']
   #   uri = URI.parse(mongouri)
-  #   $conn = Mongo::Connection.from_uri(mongouri)
-  #   $db = $conn.db(uri.path.gsub(/^\//, ''))
+  #   MongoMapper.connection = Mongo::Connection.new(uri.host, uri.port)
+  #   MongoMapper.database = uri.path.gsub(/^\//, '')
+  #   MongoMapper.database.authenticate(uri.user, uri.password)
   # end
 
   configure :production do
