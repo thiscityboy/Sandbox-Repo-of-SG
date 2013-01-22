@@ -8,6 +8,7 @@ require_relative 'minify_resources'
 
 class MyApp < Sinatra::Application
   register Sinatra::Reloader
+  set :protection, :except => :frame_options
   enable :sessions
   set :session_secret, '03c9fe100fcf579cd70229898381157423345673849e10d0c54121cc37bda6a66ec2a3de3'
 
