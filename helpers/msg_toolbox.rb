@@ -324,8 +324,27 @@ module MsgToolbox
 	    return @carriercode
 
 	  end
+    
+  	##
+  	#
+  	# Shorten a URL using the Vibes service.
+  	#
+  	# Parameters:
+  	#   urlstring - URL to shorten
+  	#
+  	# Returns:
+  	#   shortened URL
+  	#
+  	##  
+    def self.shorten_url(urlstring)
+      conn = Faraday.new
+      conn.basic_auth('msg', 'OopsIResetItAgain!')
+      resp = conn.get "http://trustapi.vibesapps.com/UrlShortener/api/shorten?url=#{urlstring}"
+      @short_url = resp.body
+    end
 
-	  ###########################
+
+	###########################
 	#
 	#   NESTED CLASSES
 	#
