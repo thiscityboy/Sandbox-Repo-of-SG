@@ -126,7 +126,7 @@ module MsgToolbox
 	#
 	# Parameters:
 	#   attribute_values - hash of attributes to capture. MDN is required
-	#   custom_attributes - hash of custom attributes to create and capture.
+	#   custom_attributes - hash of custom attributes to create and capture. (optional)
 	#   opt_in - boolean for opt_in value - true=bounceback sent; false=no bounceback
 	#
 	# Returns:
@@ -215,14 +215,15 @@ module MsgToolbox
 	# Parameters:
 	#   campaignId - campaign to enter
 	#   form_values - hash of attributes to capture
-	#   shortcode - used to send SMS bounceback after entry
+	#   custom_attributes - hash of custom attributes to create and capture. (optional)
+	#   shortcode - used to send SMS bounceback after entry (optional)
 	#
 	# Returns:
 	#   text of response upon entry as defined in campaign + sms
 	#   or text stating they've already entered, if applicable
 	#
 	##
-	def self.enter_contest(campaignId, form_values, shortcode)
+	def self.enter_contest(campaignId, form_values, custom_attributes, shortcode)
 
 		@payload = "<?xml version='1.0' encoding='UTF-8'?>
 		<contest_entry_data>"
@@ -240,7 +241,29 @@ module MsgToolbox
 		end                         
 		if form_values[:date_of_birth]
 			@payload  << "<birthday>#{form_values[:date_of_birth]}</birthday>"
-		end                             
+		end    
+		if form_values[:phone]
+			@payload  << "<phone>#{form_values[:phone]}</phone>"
+		end
+		if form_values[:street_address]
+			@payload  << "<street_address>#{form_values[:street_address]}</street_address>"
+		end    
+		if form_values[:city]
+			@payload  << "<city>#{form_values[:city]}</city>"
+		end    
+		if form_values[:state_code]
+			@payload  << "<state_code>#{form_values[:state_code]}</state_code>"
+		end   
+		if form_values[:postal_code]
+			@payload  << "<postal_code>#{form_values[:postal_code]}</postal_code>"
+		end   
+		if custom_attributes
+			@payload << "<custom_attributes>"
+			custom_attributes.each_pair do |key, value|
+				@payload << "<#{key.to_s}>#{value.to_s}</#{key.to_s}>"
+			end
+			@payload << "</custom_attributes>"
+		end                          
 		@payload  <<  "</contest_entry_data>"
 
 		conn = Faraday.new
