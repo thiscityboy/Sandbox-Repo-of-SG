@@ -11,7 +11,17 @@ module MsgToolbox
 	###########################
 
 	##
-	# convenience method for public access
+	#
+	# Send an SMS via Catapult
+	#
+	# Parameters:
+	#   mdn - SMS destination
+	#   body - content of SMS
+	#   shortcode - short code to use when sending SMS
+	#
+	# Returns:
+	#   XML in response body from Catapult
+	#
 	##
 	def self.send_sms(mdn, body, shortcode)
 		sender = SmsSender.new
@@ -20,7 +30,7 @@ module MsgToolbox
 
 	##
 	#
-	# Convenience method for content retrieval
+	# Retrieve content from Magic Database
 	#
 	# Parameters:
 	#   collection: base collection to search for content
@@ -44,7 +54,7 @@ module MsgToolbox
 
 	##
 	#
-	# Convenience method for content retrieval
+	# Retrieve single document from Magic Database
 	#
 	# Parameters:
 	#   collection: base collection to search for content
@@ -241,14 +251,15 @@ module MsgToolbox
 			req.body = @payload
 		end
 		res_hash= XmlSimple.xml_in(response.body)
-
-		if res_hash.has_key?('bad-request')
-			@msg =  res_hash["bad-request"][0]
-		else
-			@msg =  res_hash["ok"][0]
-		end
-		sender = SmsSender.new
-		sender.send(form_values[:mdn], @msg, shortcode)		
+		if shortcode 
+			if res_hash.has_key?('bad-request')
+				@msg =  res_hash["bad-request"][0]
+			else
+				@msg =  res_hash["ok"][0]
+			end
+			sender = SmsSender.new
+			sender.send(form_values[:mdn], @msg, shortcode)	
+		end	
 	end
 
 	##
@@ -335,23 +346,11 @@ module MsgToolbox
 
 	  ###########################
 	#
-	#   NESTED CLASSES
+	#   PRIVATE NESTED CLASSES
 	#
 	###########################
 
-	##
-	#
-	# Send an SMS via Catapult
-	#
-	# Parameters:
-	#   mdn - SMS destination
-	#   body - content of SMS
-	#   shortcode - short code to use when sending SMS
-	#
-	# Returns:
-	#   XML in response body from Catapult
-	#
-	##
+	
 	class SmsSender
 		def send(mdn, body, shortcode)
 			conn = Faraday.new
@@ -366,17 +365,7 @@ module MsgToolbox
 		end
 	end
 
-	##
-	#
-	# Retrieve content from Magic Database
-	#
-	# Parameters:
-	#   url - URL to get content, inlcuding encoded tags or id
-	#
-	# Returns:
-	#   @objects: array of populated DataObjects
-	#
-	##
+	
 	class ContentRetriever
 		def getContent(url)
 			conn = Faraday.new
