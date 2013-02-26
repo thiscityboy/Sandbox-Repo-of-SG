@@ -229,6 +229,7 @@ module MsgToolbox
 	##
 	#
 	# Subscribe mdn , attribute(s)  and nested custom attributes to catapult campaign.
+	#
 	# use case: when custom campaign attributes with same parent are present in campaign (i.e. - interest/music, interest/guest list, etc)
 	# because we are using Hashes for our data, we cannot have multiple keys with the same value (in the example above: 'interest'). To deal with 
 	# this, set the parent attribute as the key in the custom_attributes hash and the values as an array assigned to that key. Provide the parent name 
@@ -243,7 +244,7 @@ module MsgToolbox
 	# Returns:
 	#   body of response object as XML
 	#
-	#
+	# TODO: lots of repeated code in this method and subscribe. need to refactor to share.
 	##
 	  def self.subscribe_with_nested_attributes(campaignId, attribute_values, custom_attributes, parent_attribute, opt_in)
 
