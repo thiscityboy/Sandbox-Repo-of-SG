@@ -47,6 +47,22 @@ module MsgToolbox
 
 	##
 	#
+	# Convenience method to clean supplied MDN of non-numerics
+	#
+	# Parameters:
+	#  
+	#   mdn - mdn to be cleaned
+	#
+	# Returns:
+	#   mdn stripped of all non-numeric characters
+	#
+	##
+	def clean_mdn(mdn)
+		@clean_mdn =mdn.gsub(/[^0-9]/i, '')
+	end
+
+	##
+	#
 	# Retrieve content from Magic Database
 	#
 	# Parameters:
