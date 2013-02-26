@@ -30,6 +30,23 @@ module MsgToolbox
 
 	##
 	#
+	# Shorten a URL
+	#
+	# Parameters:
+	#  
+	#   long_url - URL to be shortened
+	#
+	# Returns:
+	#   short url
+	#
+	##
+	def self.shorten_url(long_url)
+		shortener = UrlShortener.new
+	      @short_url = shortener.shorten(long_url)
+	end
+
+	##
+	#
 	# Retrieve content from Magic Database
 	#
 	# Parameters:
@@ -109,7 +126,8 @@ module MsgToolbox
 
 	      #create short URL
 	      @coupon_url="http://vzgo2.com/incentive?c=#{campaignID.to_s}&utm_source=#{campaignID.to_s}&offercode=#{@code}"
-	      @short_url = conn.get "http://trustapi.vibesapps.com/UrlShortener/api/shorten?url=#{@coupon_url}"
+	      shortener = UrlShortener.new
+	      @short_url = shortener.shorten(@coupon_url)
 	      #send sms with link to offer
 	      @sms_body="For your exclusive offer click: #{@short_url.body}?c=#{@code} Reply HELP for help, STOP to cancel-Msg&data rates may apply"
 	      sender = SmsSender.new
@@ -207,6 +225,84 @@ module MsgToolbox
 		puts (response.body)
 		return response.body
 	end
+
+	##
+	#
+	# Subscribe mdn , attribute(s)  and nested custom attributes to catapult campaign.
+	# use case: when custom campaign attributes with same parent are present in campaign (i.e. - interest/music, interest/guest list, etc)
+	# because we are using Hashes for our data, we cannot have multiple keys with the same value (in the example above: 'interest'). To deal with 
+	# this, set the parent attribute as the key in the custom_attributes hash and the values as an array assigned to that key. Provide the parent name 
+	# to this function and the nested attributes will be generated for catapult consumption ( 'interest' => ['music','guest list']).
+	#
+	# Parameters:
+	#   attribute_values - hash of attributes to capture. MDN is required
+	#   custom_attributes - hash of custom attributes to create and capture. parent attribute key has array of child values as value
+	#   opt_in - boolean for opt_in value - true=bounceback sent; false=no bounceback
+	# 	parent_attribute - name of parent custom attribute that contains children
+	#
+	# Returns:
+	#   body of response object as XML
+	#
+	#
+	##
+	  def self.subscribe_with_nested_attributes(campaignId, attribute_values, custom_attributes, parent_attribute, opt_in)
+
+	    opt = opt_in ? "invite" : "auto"
+	    @url = "http://www.vibescm.com/api/subscription_campaigns/#{campaignId.to_s}/multi_subscriptions.xml"
+	    @payload = "<?xml version='1.0' encoding='UTF-8'?><subscriptions><opt_in>#{opt}</opt_in>"
+
+	    if custom_attributes
+	      @payload << "<create_attribute>true</create_attribute>"
+	    end
+
+	    @payload << "<user>"
+	    if attribute_values[:mdn]
+	      @payload << "<mobile_phone>#{attribute_values[:mdn]}</mobile_phone>"
+	    end
+	    if attribute_values[:first_name]
+	      @payload << "<first_name type=\"string\">#{attribute_values[:first_name]}</first_name>"
+	    end
+	    if attribute_values[:last_name]
+	      @payload << "<last_name type=\"string\">#{attribute_values[:last_name]}</last_name>"
+	    end
+	    if attribute_values[:email]
+	      @payload << "<email type=\"string\">#{attribute_values[:email]}</email>"
+	    end
+	    if attribute_values[:birthday]
+	      @payload << "<birthday_on type=\"string\">#{attribute_values[:birthday]}</birthday_on>"
+	    end
+	    if attribute_values[:gender]
+	      @payload << "<gender type=\"string\">#{attribute_values[:gender]}</birthday_on>"
+	    end
+
+	    if custom_attributes
+	      @payload << "<attribute_paths>"
+	      custom_attributes.each_pair do |key, value|
+	      	if key.to_s == parent_attribute
+	      		value.each do |val|
+	      			@payload << "<attribute_path>#{key.to_s}/#{val}</attribute_path>"
+	      		end
+	      	else
+	      		@payload << "<attribute_path>#{key.to_s}/#{value.to_s}</attribute_path>"
+	      	end	        
+	      end
+	      @payload << "</attribute_paths>"
+	    end
+
+	    @payload << "</user></subscriptions>"
+	    puts @url
+	    puts @payload
+	    conn = Faraday.new
+	    conn.basic_auth(ENV['SPLAT_API_USER'], ENV['SPLAT_API_PASS'])
+	    @response = conn.post do |req|
+	      req.url @url
+	      req.headers['Content-Type'] = 'application/xml'
+	      req.body = @payload
+	    end
+
+	    return @response.body
+
+	  end
 
 	##
 	#
@@ -385,6 +481,15 @@ module MsgToolbox
 			end
 			puts '++++++++++++ SMS Sender response: ' + response.body
 			return response.body
+		end
+	end
+
+	class UrlShortener
+		def shorten(url)
+			conn = Faraday.new
+	    		conn.basic_auth(ENV['SHORT_USER'], ENV['SHORT_PASS'])
+		      #create short URL
+		      @short_url = conn.get "http://trustapi.vibesapps.com/UrlShortener/api/shorten?url=#{url}"
 		end
 	end
 
