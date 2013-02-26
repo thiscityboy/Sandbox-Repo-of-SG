@@ -57,7 +57,7 @@ module MsgToolbox
 	#   mdn stripped of all non-numeric characters
 	#
 	##
-	def clean_mdn(mdn)
+	def self.clean_mdn(mdn)
 		@clean_mdn =mdn.gsub(/[^0-9]/i, '')
 	end
 
