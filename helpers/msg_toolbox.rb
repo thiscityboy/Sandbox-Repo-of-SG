@@ -387,12 +387,12 @@ module MsgToolbox
 			req.body = @payload
 		end
 		res_hash= XmlSimple.xml_in(response.body)
+		if res_hash.has_key?('bad-request')
+			@msg =  res_hash["bad-request"][0]
+		else
+			@msg =  res_hash["ok"][0]
+		end
 		if shortcode 
-			if res_hash.has_key?('bad-request')
-				@msg =  res_hash["bad-request"][0]
-			else
-				@msg =  res_hash["ok"][0]
-			end
 			sender = SmsSender.new
 			sender.send(form_values[:mdn], @msg, shortcode)	
 		end	
