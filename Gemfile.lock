@@ -8,7 +8,9 @@ GEM
       i18n (~> 0.6)
       multi_json (~> 1.0)
     backports (2.6.5)
-    bson (1.8.1)
+    bson (1.8.3)
+    bson_ext (1.8.3)
+      bson (~> 1.8.3)
     builder (3.0.4)
     cssmin (1.0.2)
     eventmachine (1.0.0)
@@ -17,14 +19,15 @@ GEM
     i18n (0.6.1)
     jsmin (1.0.1)
     json (1.7.6)
-    mongo (1.8.1)
-      bson (~> 1.8.1)
+    mongo (1.8.3)
+      bson (~> 1.8.3)
     mongo_mapper (0.12.0)
       activemodel (~> 3.0)
       activesupport (~> 3.0)
       plucky (~> 0.5.2)
     multi_json (1.5.0)
     multipart-post (1.1.5)
+    nokogiri (1.5.6)
     plucky (0.5.2)
       mongo (~> 1.5)
     rack (1.4.3)
@@ -52,11 +55,14 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  bson_ext (~> 1.8.2)
   cssmin
   faraday
   jsmin
   json
+  mongo (~> 1.8.2)
   mongo_mapper
+  nokogiri
   sinatra
   sinatra-contrib
   sinatra-flash

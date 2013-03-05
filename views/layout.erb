@@ -3,6 +3,17 @@
 <head>
   <meta charset="utf-8">
   <title> </title>
+  <script type="text/javascript">
+	  	// Device detect
+	  	var deviceAgent = navigator.userAgent.toLowerCase();
+	  	var agentID = deviceAgent.match(/(android 3.0|android 3.2)/);
+	     if (agentID) { //ios
+		     	// _gaq.push(['_trackEvent', 'Detect', 'NHL', 'App']);
+		     	setTimeout(function(){
+		     		document.location='/incompatible';
+		     	},500);			      
+	    	}     
+	</script>
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">

@@ -506,7 +506,8 @@ module MsgToolbox
 			conn = Faraday.new
 	    		conn.basic_auth(ENV['SHORT_USER'], ENV['SHORT_PASS'])
 		      #create short URL
-		      @short_url = conn.get "http://trustapi.vibesapps.com/UrlShortener/api/shorten?url=#{url}"
+		      resp = conn.get "http://trustapi.vibesapps.com/UrlShortener/api/shorten?url=#{url}"
+		      @short_url = resp.body
 		end
 	end
 
