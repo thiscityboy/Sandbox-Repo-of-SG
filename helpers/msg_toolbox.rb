@@ -503,10 +503,11 @@ module MsgToolbox
 
 	class UrlShortener
 		def shorten(url)
+			# conn = Faraday.new 'https://trustapi2.vibesapps.com/', ssl: {verify: false}
 			conn = Faraday.new
 	    		conn.basic_auth(ENV['SHORT_USER'], ENV['SHORT_PASS'])
 		      #create short URL
-		      resp = conn.get "http://trustapi.vibesapps.com/UrlShortener/api/shorten?url=#{url}"
+		      resp = conn.get "/UrlShortener/api/shorten?url=#{url}"
 		      @short_url = resp.body
 		end
 	end
