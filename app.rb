@@ -27,6 +27,8 @@ class MyApp < Sinatra::Application
     set :css_files, :blob
     set :js_files, :blob
     MinifyResources.minify_all
+    #ensure stdout logging ("puts") shows up in heroku
+    $stdout.sync = true
   end
 
   configure :development do
