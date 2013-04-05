@@ -485,16 +485,24 @@ module MsgToolbox
 	#   PRIVATE NESTED CLASSES
 	#
 	###########################
-
 	
 	class SmsSender
 		def send(mdn, body, shortcode)
-			conn = Faraday.new
-			conn.basic_auth(ENV['MSG_API_USER'], ENV['MSG_API_PASS'])
+			@payload = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+                    <mtMessage>
+                      <destination address=\"#{mdn}\" type=\"MDN\"/>
+                      <source address=\"#{shortcode}\" type=\"SC\" />
+                      <text><![CDATA[#{body}]]></text>
+                    </mtMessage>"
+            splat = ENV['SPLAT_API_USER']   
+		    un = "Vibes #{splat}"
+		    pw = ENV['SPLAT_API_PASS']
+
+			conn = Faraday.new 'https://api.vibes.com/MessageApi/mt/messages', ssl: {verify: false}
 			response = conn.post do |req|
-				req.url "http://msg-toolbox.apps1.vibescm.com/api/v2/message.xml/send/#{shortcode.to_s}/#{mdn.to_s}"
 				req.headers['Content-Type'] = 'application/xml'
-				req.body = body
+				req.headers['Authorization'] = un + ":" + pw
+				req.body = @payload
 			end
 			puts '++++++++++++ SMS Sender response: ' + response.body
 			return response.body
