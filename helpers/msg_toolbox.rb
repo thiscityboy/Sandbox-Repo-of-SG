@@ -116,43 +116,20 @@ module MsgToolbox
 	# Parameters:
 	#   campaignID - incentive campaign id
 	#   mdn - user's phone number
-	#   shortcode - short code to use when senidng SMS
 	#
 	# Returns:
-	#   FAIL - when no codes available
-	#   SUCCESS - when sms sent containing link to offer
+	#   @code - incentive code found or nil
 	#
 	##
 	def self.get_offers(campaignID, mdn, shortcode)
 
 		conn = Faraday.new
 		conn.basic_auth(ENV['SPLAT_API_USER'], ENV['SPLAT_API_PASS'])
-
-	    #get next code or "no more" message
 	    response = conn.get "http://www.vibescm.com/api/incentive_codes/issue/#{campaignID.to_s}.xml?mobile=#{mdn.to_s}"
 	    response_hash= XmlSimple.xml_in(response.body)
+	    @code = response_hash["code"][0]
 
-	    if response_hash.has_key?('message')
-	    	return 'FAIL'
-	    else
-	    	@code = response_hash["code"][0]
-
-	    	conn = Faraday.new
-	    	conn.basic_auth('msg', 'OopsIResetItAgain!')
-
-	      #create short URL
-	      @coupon_url="http://vzgo2.com/incentive?c=#{campaignID.to_s}&utm_source=#{campaignID.to_s}&offercode=#{@code}"
-	      shortener = UrlShortener.new
-	      @short_url = shortener.shorten(@coupon_url)
-	      #send sms with link to offer
-	      @sms_body="For your exclusive offer click: #{@short_url.body}?c=#{@code} Reply HELP for help, STOP to cancel-Msg&data rates may apply"
-	      sender = SmsSender.new
-	      sender.send(mdn, @sms_body, shortcode)
-
-	      return 'SUCCESS'
-	    end
-
-	  end
+	end
 
 	##
 	#
