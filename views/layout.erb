@@ -94,10 +94,14 @@
 
 <div id="content">
   <div class="container-fluid">
+    <%= styled_flash %>
     <%= yield %>
   </div> <!-- /container -->
 </div>
-
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#flash').delay(5000).fadeOut(400);
+        });
+    </script>
 </body>
 </html>
-
