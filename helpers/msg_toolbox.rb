@@ -116,18 +116,27 @@ module MsgToolbox
 	# Parameters:
 	#   campaignID - incentive campaign id
 	#   mdn - user's phone number
+	#   mp_id - mobile page id used to display offer (check the campaign's bounceback text for this ID)
 	#
 	# Returns:
 	#   @code - incentive code found or nil
 	#
 	##
-	def self.get_offers(campaignID, mdn, shortcode)
+	def self.get_offers(campaignID, mdn, shortcode, mp_id)
 
 		conn = Faraday.new
 		conn.basic_auth(ENV['SPLAT_API_USER'], ENV['SPLAT_API_PASS'])
 	    response = conn.get "http://www.vibescm.com/api/incentive_codes/issue/#{campaignID.to_s}.xml?mobile=#{mdn.to_s}"
 	    response_hash= XmlSimple.xml_in(response.body)
 	    @code = response_hash["code"][0]
+		unless @code.nil? || @code.empty?
+			@coupon_url="http://mp.vibescm.com/p/#{mp_id}?code=#{@code}"
+			shortener = UrlShortener.new
+			@short_url = shortener.shorten(@coupon_url)	
+			@sms_body="For an exclusive offer click: #{@short_url}?c=#{@code} Reply HELP for help, STOP to cancel-Msg&data rates may apply"
+			sender = SmsSender.new
+			sender.send(mdn, @sms_body, shortcode)
+		end
 
 	end
 
