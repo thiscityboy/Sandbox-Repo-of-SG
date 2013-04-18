@@ -214,11 +214,11 @@ module MsgToolbox
   def self.simple_subscribe(campaignId, mdn)
 
     req_payload = '<?xml version=\'1.0\' encoding=\'UTF-8\'?>
-		<subscription>
-		<user>
-		<mobile_phone>' + mdn + '</mobile_phone>
-		</user>
-		</subscription>'
+    <subscription>
+    <user>
+    <mobile_phone>' + mdn + '</mobile_phone>
+    </user>
+    </subscription>'
     @url = "http://www.vibescm.com/api/subscription_campaigns/#{campaignId.to_s}/subscriptions.xml"
     conn = Faraday.new
     conn.basic_auth(ENV['SPLAT_API_USER'], ENV['SPLAT_API_PASS'])
@@ -244,7 +244,7 @@ module MsgToolbox
   #   attribute_values - hash of attributes to capture. MDN is required
   #   custom_attributes - hash of custom attributes to create and capture. parent attribute key has array of child values as value
   #   opt_in - boolean for opt_in value - true=bounceback sent; false=no bounceback
-  # 	parent_attribute - name of parent custom attribute that contains children
+  #   parent_attribute - name of parent custom attribute that contains children
   #
   # Returns:
   #   body of response object as XML
@@ -328,7 +328,7 @@ module MsgToolbox
   def self.enter_contest(campaignId, form_values, custom_attributes, shortcode)
 
     @payload = "<?xml version='1.0' encoding='UTF-8'?>
-		<contest_entry_data>"
+    <contest_entry_data>"
     if form_values[:mdn]
       @payload  << "<mobile_phone>#{form_values[:mdn]}</mobile_phone>"
     end
@@ -397,30 +397,18 @@ module MsgToolbox
   #
   # Returns:
   #   Error code 400, indicating name was forbidden
-  #   or JSON of signed image:
-  #   {
-  #    "_id":"51704a21940ed58a2c000002",
-  #    "autograph_base_image_id":"5151e9e23de80e669400000a",
-  #    "created_at":"2013-04-18T19:31:45+00:00",
-  #    "name":"Chuck",
-  #    "photo":{
-  #       "url":"https://msg-umami-t2a.s3.amazonaws.com/autographed_images/UXBKIZQO1YosAAAC.png",
-  #       "tiny_thumb":{
-  #          "url":"https://msg-umami-t2a.s3.amazonaws.com/autographed_images/tiny_thumb_UXBKIZQO1YosAAAC.png"
-  #       },
-  #       "thumb":{
-  #          "url":"https://msg-umami-t2a.s3.amazonaws.com/autographed_images/thumb_UXBKIZQO1YosAAAC.png"
-  #       }
-  #    },
-  #    "short_url":"http://vbs.cm/W0P501",
-  #    "updated_at":"2013-04-18T19:31:47+00:00"
-  # }
-  #
+  #   or signed image name
   ##
   def self.sign_autograph(name, baseImageId)
     conn = Faraday.new
     conn.basic_auth(ENV['MSG_API_USER'], ENV['MSG_API_PASS'])
-    @response = conn.get "http://msg-umami-api.herokuapp.com/api/v2.0/autograph/sign/#{name}/#{baseImageId}"
+    @result = conn.get "http://msg-umami-api.herokuapp.com/api/v2.0/autograph/sign/#{baseImageId}/#{name}"
+    if @result.body.include? 'restricted'
+      @result=400
+    else
+      resp_json = JSON.parse(@result.body)
+      @result = resp_json['photo']['url'].gsub('https://msg-umami-t2a.s3.amazonaws.com/autographed_images/','')
+    end
   end
 
   def self.send_international_sms(mdn, body)
