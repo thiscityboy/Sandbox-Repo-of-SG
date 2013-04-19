@@ -408,6 +408,7 @@ module MsgToolbox
     else
       resp_json = JSON.parse(@result.body)
       @result = resp_json['photo']['url'].gsub('https://msg-umami-t2a.s3.amazonaws.com/autographed_images/','')
+      @result = URI::encode(@result)
     end
   end
 
