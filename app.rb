@@ -1,6 +1,7 @@
 require 'sinatra'
 require 'sinatra/flash'
 require 'sinatra/reloader'
+require 'sinatra/cookies'
 require 'mongo_mapper'
 require 'json'
 
@@ -38,6 +39,7 @@ class MyApp < Sinatra::Application
 
   helpers do
     include Rack::Utils
+    include Sinatra::Cookies
     alias_method :h, :escape_html
   end
 end
