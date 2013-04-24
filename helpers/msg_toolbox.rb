@@ -123,7 +123,7 @@ module MsgToolbox
   #
   ##
   def self.get_offers(campaignID, mdn, shortcode, mp_id)
-
+    mdn=mdn.gsub(/[^0-9]/i, '')
     conn = Faraday.new
     conn.basic_auth(ENV['SPLAT_API_USER'], ENV['SPLAT_API_PASS'])
     response = conn.get "http://www.vibescm.com/api/incentive_codes/issue/#{campaignID.to_s}.xml?mobile=#{mdn.to_s}"
@@ -169,7 +169,8 @@ module MsgToolbox
 
     @payload << "<user>"
     if attribute_values[:mdn]
-      @payload << "<mobile_phone>#{attribute_values[:mdn]}</mobile_phone>"
+      mdn=attribute_values[:mdn].gsub(/[^0-9]/i, '')
+      @payload << "<mobile_phone>#{mdn}</mobile_phone>"
     end
     if attribute_values[:first_name]
       @payload << "<first_name type=\"string\">#{attribute_values[:first_name]}</first_name>"
@@ -212,7 +213,7 @@ module MsgToolbox
 
 
   def self.simple_subscribe(campaignId, mdn)
-
+    mdn=mdn.gsub(/[^0-9]/i, '')
     req_payload = '<?xml version=\'1.0\' encoding=\'UTF-8\'?>
     <subscription>
     <user>
@@ -263,7 +264,8 @@ module MsgToolbox
 
     @payload << "<user>"
     if attribute_values[:mdn]
-      @payload << "<mobile_phone>#{attribute_values[:mdn]}</mobile_phone>"
+      mdn=attribute_values[:mdn].gsub(/[^0-9]/i, '')
+      @payload << "<mobile_phone>#{mdn}</mobile_phone>"
     end
     if attribute_values[:first_name]
       @payload << "<first_name type=\"string\">#{attribute_values[:first_name]}</first_name>"
@@ -330,7 +332,8 @@ module MsgToolbox
     @payload = "<?xml version='1.0' encoding='UTF-8'?>
     <contest_entry_data>"
     if form_values[:mdn]
-      @payload  << "<mobile_phone>#{form_values[:mdn]}</mobile_phone>"
+      mdn=form_values[:mdn].gsub(/[^0-9]/i, '')
+      @payload  << "<mobile_phone>#{mdn}</mobile_phone>"
     end
     if form_values[:first_name]
       @payload  << "<first_name>#{form_values[:first_name]}</first_name>"
@@ -413,6 +416,7 @@ module MsgToolbox
   end
 
   def self.send_international_sms(mdn, body)
+    mdn=mdn.gsub(/[^0-9]/i, '')
     conn = Faraday.new
     @response = conn.get "http://list.lumata.com/wmap/SMS.html?User=msuk_vibes&Password=v1b3s4uk&Type=SMS&Body="+body+"+Vibes&Phone="+mdn+"&Sender=Vibes"
     @response.body["<html>"] = ""
@@ -448,7 +452,8 @@ module MsgToolbox
     un = 'Vibes rb@jbrb.com'
     pw = xy + ab
 
-    uri = URI.parse('https://api.vibes.com/MessageApi/mdns/' + mdn.to_s)
+    mdn=mdn.gsub(/[^0-9]/i, '')
+    uri = URI.parse('https://api.vibes.com/MessageApi/mdns/' + mdn)
     #uri = URI.parse('http://connprod04.prod.vibes.com:8080/MessageApi/mdns/' + mdn.to_s)
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
@@ -474,9 +479,10 @@ module MsgToolbox
 
   class SmsSender
     def send(mdn, body, shortcode)
+      @mdn=mdn.gsub(/[^0-9]/i, '')
       @payload = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
                     <mtMessage>
-                      <destination address=\"#{mdn}\" type=\"MDN\"/>
+                      <destination address=\"#{@mdn}\" type=\"MDN\"/>
                       <source address=\"#{shortcode}\" type=\"SC\" />
                       <text><![CDATA[#{body}]]></text>
                     </mtMessage>"
