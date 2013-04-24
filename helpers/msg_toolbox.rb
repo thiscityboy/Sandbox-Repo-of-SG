@@ -426,49 +426,42 @@ module MsgToolbox
     return @response.body
   end
 
-  # TODO: Need to get splat api user access to carrier lookup
-  #  def self.get_carrier_code(mdn)
-  #    puts 'getting carrier code'
-  #        conn = Faraday.new 'https://api.vibes.com', :ssl => {:verify => false}
-  #        conn.basic_auth(ENV['SPLAT_API_USER'], ENV['SPLAT_API_PASS'])
-  #        response = conn.get "/MessageApi/mdns/"+ mdn.to_s
-  #puts response.body
-  #        res_hash= XmlSimple.xml_in(response.body)
-  #        return res_hash['carrier']
-  #  end
+  ##
+  #  Look up Carrier for MDN
+  #
+  # Parameters:
+  #   mdn - mobile number
+  #
+  # Returns:
+  #   carrier code as integer
+  #
+  # Carrier Code   Carrier Name
+  # 101   U.S. Cellular
+  # 102   Verizon Wireless
+  # 103   Sprint Nextel(CDMA)
+  # 104   AT&T
+  # 105   T-Mobile
+  #
+  # full list of codes:
+  #   http://wiki.vibes.com/display/API/Appendix+B++-+Carrier+Codes
 
   def self.get_carrier_code(mdn)
-
-    require 'net/http'
     require 'nokogiri'
 
-    #Scramble
-    ab = 'A134'
-    xy = 'gbPSM2'
-    ab = ab.gsub('3', '')
-    xy = xy.gsub('2', '')
+    splat = ENV['SPLAT_API_USER']
+    un = "Vibes #{splat}"
+    pw = ENV['SPLAT_API_PASS']
 
-    #PUT Create Subscription
-    un = 'Vibes rb@jbrb.com'
-    pw = xy + ab
-
-    mdn=mdn.gsub(/[^0-9]/i, '')
-    uri = URI.parse('https://api.vibes.com/MessageApi/mdns/' + mdn)
-    #uri = URI.parse('http://connprod04.prod.vibes.com:8080/MessageApi/mdns/' + mdn.to_s)
-    http = Net::HTTP.new(uri.host, uri.port)
-    http.use_ssl = true
-    http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-    req = Net::HTTP::Get.new(uri.request_uri)
-    req.add_field("Authorization", un + ":" + pw)
-    res = http.request(req)
-    puts res.body
-    doc = Nokogiri::XML(res.body)
+    conn = Faraday.new "https://api.vibes.com/MessageApi/mdns/#{mdn}", ssl: {verify: false}
+    @resp = conn.get do |req|
+      req.headers['Authorization'] = un + ":" + pw
+    end
+    puts @resp.body
+    doc = Nokogiri::XML(@resp.body)
     @doc = doc.xpath('//mdn').each do |record|
       @carriercode = record.at('@carrier').text
     end
-
-    return @carriercode
-
+    @carriercode.to_i
   end
 
   ###########################
