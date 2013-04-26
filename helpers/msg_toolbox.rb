@@ -452,7 +452,7 @@ module MsgToolbox
     un = "Vibes #{splat}"
     pw = ENV['SPLAT_API_PASS']
 
-    conn = Faraday.new "https://api.vibes.com/MessageApi/mdns/#{mdn}", ssl: {verify: false}
+    conn = Faraday.new "https://api.vibesapps.com/MessageApi/mdns/#{mdn}", ssl: {verify: false}
     @resp = conn.get do |req|
       req.headers['Authorization'] = un + ":" + pw
     end
@@ -483,7 +483,7 @@ module MsgToolbox
       un = "Vibes #{splat}"
       pw = ENV['SPLAT_API_PASS']
 
-      conn = Faraday.new 'https://api.vibes.com/MessageApi/mt/messages', ssl: {verify: false}
+      conn = Faraday.new 'https://api.vibesapps.com/MessageApi/mt/messages', ssl: {verify: false}
       response = conn.post do |req|
         req.headers['Content-Type'] = 'application/xml'
         req.headers['Authorization'] = un + ":" + pw
