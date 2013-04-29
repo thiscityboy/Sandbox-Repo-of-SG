@@ -485,7 +485,7 @@ module MsgToolbox
 
       conn = Faraday.new 'https://api.vibesapps.com/MessageApi/mt/messages', ssl: {verify: false}
       response = conn.post do |req|
-        req.headers['Content-Type'] = 'application/xml'
+        req.headers['Content-Type'] = 'text/xml'
         req.headers['Authorization'] = un + ":" + pw
         req.body = @payload
       end
