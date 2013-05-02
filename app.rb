@@ -17,10 +17,14 @@ class MyApp < Sinatra::Application
   #uncomment to add mongo support
   # configure do
   #   mongouri = ENV['MONGOLAB_URI']
+  #mongomapper
   #   uri = URI.parse(mongouri)
-  #   MongoMapper.connection = Mongo::Connection.new(uri.host, uri.port)
+  #   MongoMapper.connection = Mongo::MongoClient.from_uri(mongouri, :pool_size => 15)
   #   MongoMapper.database = uri.path.gsub(/^\//, '')
   #   MongoMapper.database.authenticate(uri.user, uri.password)
+  #ruby driver
+  # $conn = Mongo::MongoClient.from_uri(mongouri, :pool_size => 15)
+  # $db = $conn.db(uri.path.gsub(/^\//, ''))
   # end
 
   configure :production do

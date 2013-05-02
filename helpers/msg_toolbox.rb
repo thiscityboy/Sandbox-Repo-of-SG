@@ -109,6 +109,7 @@ module MsgToolbox
 
   end
 
+
   ##
   #
   #  Find and send incentive offer to user
@@ -129,18 +130,20 @@ module MsgToolbox
     response = conn.get "http://www.vibescm.com/api/incentive_codes/issue/#{campaignID.to_s}.xml?mobile=#{mdn.to_s}"
     puts response.body
     response_hash= XmlSimple.xml_in(response.body)
-    unless response_hash["code"].nil?
-      @code = response_hash["code"][0]
-      @coupon_url="http://mp.vibescm.com/p/#{mp_id}?code=#{@code}"
-      shortener = UrlShortener.new
-      @short_url = shortener.shorten(@coupon_url)
-      @sms_body="For an exclusive offer click: #{@short_url}?c=#{@code} Reply HELP for help, STOP to cancel-Msg&data rates may apply"
-      sender = SmsSender.new
-      sender.send(mdn, @sms_body, shortcode)
+    if response_hash["code"].nil?
+      @code = 'NONE'
     else
-      @return = 'NONE'
+      @code = response_hash["code"][0]
+      unless shortcode.nil?
+        @coupon_url="http://mp.vibescm.com/p/#{mp_id}?code=#{@code}"
+        shortener = UrlShortener.new
+        @short_url = shortener.shorten(@coupon_url)
+        @sms_body="For an exclusive offer click: #{@short_url}?c=#{@code} Reply HELP for help, STOP to cancel-Msg&data rates may apply"
+        sender = SmsSender.new
+        sender.send(mdn, @sms_body, shortcode)
+      end
     end
-
+    @code
   end
 
   ##
