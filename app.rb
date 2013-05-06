@@ -19,7 +19,7 @@ class MyApp < Sinatra::Application
   #   mongouri = ENV['MONGOLAB_URI']
   #mongomapper
   #   uri = URI.parse(mongouri)
-  #   MongoMapper.connection = Mongo::MongoClient.from_uri(mongouri, :pool_size => 15)
+  #   MongoMapper.connection = Mongo::Connection.new(uri.host, uri.port)
   #   MongoMapper.database = uri.path.gsub(/^\//, '')
   #   MongoMapper.database.authenticate(uri.user, uri.password)
   #ruby driver
