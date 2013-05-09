@@ -11,8 +11,7 @@ class MyApp < Sinatra::Application
   register Sinatra::Reloader
   set :protection, :except => :frame_options
   enable :sessions
-  set :session_secret, '03c9fe100fcf579cd70229898381157423345673849e10d0c54121cc37bda6a66ec2a3de3'
-
+  set :session_secret, ENV["SECRET_TOKEN"] || '03c9fe100fcf579cd70229898381157898423345673849e10d0c54121cc37bda6a66ec2ae3'
 
   #uncomment to add mongo support
   # configure do
