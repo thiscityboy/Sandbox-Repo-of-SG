@@ -53,7 +53,7 @@ end
 # ENV['BASIC_PW']
 # ENV['BASIC_REALM']
 #
-# set teh ENV vars and uncomment the following line to enable basic auth
+# set the ENV vars and uncomment the following line to enable basic auth
 # require_relative 'lib/sinatra/basic_auth'
 
 require_relative 'helpers/init'
