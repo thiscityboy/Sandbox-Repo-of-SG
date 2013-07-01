@@ -32,7 +32,7 @@ module Sinatra
       end
 
       def unauthorized!
-        app.headers 'WWW-Authenticate' => %(Basic realm="#{settings.basic_auth_realm}")
+        app.headers 'WWW-Authenticate' => %(Basic realm="#{ENV['BASIC_REALM']}")
         throw :halt, [ 401, 'Authorization Required' ]
       end
 
@@ -45,8 +45,8 @@ module Sinatra
       end
 
       def authorize( username, password )
-        (settings.basic_auth_username == username &&
-            settings.basic_auth_password == password)
+        (ENV['BASIC_USER'] == username &&
+            ENV['BASIC_PW' == password)
       end
     end
 

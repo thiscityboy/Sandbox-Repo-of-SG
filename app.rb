@@ -47,6 +47,15 @@ class MyApp < Sinatra::Application
   end
 end
 
+#
+# basic auth requires the following three environment variables be set:
+# ENV['BASIC_USER']
+# ENV['BASIC_PW']
+# ENV['BASIC_REALM']
+#
+# set teh ENV vars and uncomment the following line to enable basic auth
+# require_relative 'lib/sinatra/basic_auth'
+
 require_relative 'helpers/init'
 require_relative 'models/init'
 require_relative 'routes/init'
