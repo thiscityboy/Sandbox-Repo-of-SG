@@ -36,8 +36,10 @@ class MyApp < Sinatra::Application
   end
 
   configure :development do
+    require 'better_errors'
     set :css_files, MinifyResources::CSS_FILES
     set :js_files, MinifyResources::JS_FILES
+    use BetterErrors::Middleware
   end
 
   helpers do
