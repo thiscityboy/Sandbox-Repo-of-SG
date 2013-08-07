@@ -8,17 +8,26 @@ GEM
       i18n (= 0.6.1)
       multi_json (~> 1.0)
     backports (3.3.0)
+    better_errors (0.9.0)
+      coderay (>= 1.0.0)
+      erubis (>= 2.6.6)
+    binding_of_caller (0.7.2)
+      debug_inspector (>= 0.0.1)
     bson (1.8.5)
     bson_ext (1.8.5)
       bson (~> 1.8.5)
     builder (3.0.4)
+    coderay (1.0.9)
     cssmin (1.0.3)
+    debug_inspector (0.0.2)
+    erubis (2.7.0)
     eventmachine (1.0.3)
     faraday (0.9.0.rc5)
       multipart-post (~> 1.1)
     i18n (0.6.1)
     jsmin (1.0.1)
     json (1.8.0)
+    kgio (2.8.0)
     mongo (1.8.5)
       bson (~> 1.8.5)
     mongo_mapper (0.12.0)
@@ -35,6 +44,7 @@ GEM
       rack
     rack-test (0.6.2)
       rack (>= 1.0)
+    raindrops (0.11.0)
     sinatra (1.4.2)
       rack (~> 1.5, >= 1.5.2)
       rack-protection (~> 1.4)
@@ -49,21 +59,28 @@ GEM
     sinatra-flash (0.3.0)
       sinatra (>= 1.0.0)
     tilt (1.4.1)
+    unicorn (4.6.3)
+      kgio (~> 2.6)
+      rack
+      raindrops (~> 0.7)
     xml-simple (1.1.2)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
-  bson_ext (~> 1.8.2)
+  better_errors
+  binding_of_caller
+  bson_ext
   cssmin
-  faraday (~> 0.9.0.rc5)
+  faraday
   jsmin
   json
-  mongo (~> 1.8.2)
+  mongo
   mongo_mapper
   nokogiri
   sinatra
   sinatra-contrib
   sinatra-flash
+  unicorn
   xml-simple
