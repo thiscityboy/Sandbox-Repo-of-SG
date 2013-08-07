@@ -3,13 +3,17 @@ class MyApp < Sinatra::Application
 
 
 
-get "/" do
-  erb :main
-end
+	get "/" do
+	  erb :main
+	end
 
-get "/springy" do
-	erb :springy, :layout => false
-end
+	get "/springy" do
+		erb :springy, :layout => false
+	end
+
+	get "/divide" do
+		erb :divide, :layout => false
+	end
 
   get "/monitor" do
     erb :monitor, :layout => false

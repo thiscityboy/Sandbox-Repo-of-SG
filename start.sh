@@ -10,4 +10,4 @@ export SPLAT_API_PASS='Spl@t@pi!'
 #export MONGOLAB_URI=mongodb://USER:PASS@ds047387.mongolab.com:47387/DATABASE
 
 
-unicorn
+rackup
