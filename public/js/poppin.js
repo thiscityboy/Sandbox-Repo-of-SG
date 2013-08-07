@@ -22,7 +22,7 @@ var nodes = {
   density: 4,
   drawdistance: 9,
   pushdistance: 200,
-  pointradius: 2,
+  pointradius: 1,
   color: {r:255,g:0,b:0,i:0},
   
   //set up
@@ -50,7 +50,7 @@ var nodes = {
     this.context.font =  "bold 200px 'Helvetica Neue'";
     this.context.fillStyle = 'white';		
     this.context.textAlign = 'center';
-    this.context.fillText('♥',this.canvas.width/2,this.canvas.height/2);
+    this.context.fillText('MSG',this.canvas.width/2,this.canvas.height/2);
     
     this.img  = this.context.getImageData(0,0,this.canvas.width,this.canvas.height);
     
