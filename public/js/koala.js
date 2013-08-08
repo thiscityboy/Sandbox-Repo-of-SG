@@ -135,7 +135,7 @@ var koala = {
   // Main code
   var vis,
       maxSize = 512,
-      minSize = 4,
+      minSize = 8,
       dim = maxSize / minSize;
 
   koala.loadImage = function(imageData) {
@@ -167,7 +167,7 @@ var koala = {
       var percent = 1 - d3.sum(splitableByLayer) / splitableTotal;
       if (percent >= nextPercent) {
         onEvent('PercentClear', Math.round(nextPercent * 100));
-        nextPercent += 0.05;
+        nextPercent += 1.5;
       }
     }
 
