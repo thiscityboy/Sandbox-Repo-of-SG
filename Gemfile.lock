@@ -39,7 +39,7 @@ GEM
     nokogiri (1.5.9)
     plucky (0.5.2)
       mongo (~> 1.5)
-    rack (1.5.2)
+    rack (1.6.12)
     rack-protection (1.5.0)
       rack
     rack-test (0.6.2)
